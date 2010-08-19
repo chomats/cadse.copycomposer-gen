@@ -2,6 +2,7 @@ package fr.imag.adele.cadse.copycomposer.generator;
 
 import fr.imag.adele.cadse.cadseg.generator.exporter.GExporter;
 import fr.imag.adele.cadse.core.GenStringBuilder;
+import fr.imag.adele.cadse.core.Item;
 
 /**
  * @generated
@@ -9,7 +10,7 @@ import fr.imag.adele.cadse.core.GenStringBuilder;
 public class GJavaRefExporter extends GExporter {
 
 	@Override
-	protected void generateConstrustorArguments(final GenStringBuilder sb) {
+	protected void generateConstrustorArguments(final GenStringBuilder sb, Item currentItem) {
 		sb.append("contentItem");
 	}
 

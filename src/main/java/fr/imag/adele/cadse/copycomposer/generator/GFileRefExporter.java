@@ -7,6 +7,7 @@ import model.workspace.copycomposer.managers.FileRefExporterManager;
 import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.java.JavaIdentifier;
 import fede.workspace.eclipse.java.manager.JavaFileContentManager;
+import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
@@ -37,7 +38,7 @@ public class GFileRefExporter extends GExporter {
 	}
 
 	@Override
-	protected void generateConstrustorArguments(final GenStringBuilder sb) {
+	protected void generateConstrustorArguments(final GenStringBuilder sb, Item currentItem) {
 		sb.append("contentManager,null,null,exportTypes");
 	}
 
@@ -56,93 +57,11 @@ public class GFileRefExporter extends GExporter {
 		Set<String> imports = state.getImports();
 
 		// ItemType it = getItem().getType();
-		final String defaultQualifiedClassName = cm.getDefaultClassName();
-		String defaultClassName = JavaIdentifier
-				.getlastclassName(defaultQualifiedClassName);
-
-		if ("inner-class".equals(kind)) {
-			final boolean extendsClass = cm.mustBeExtended()
-					|| ExporterManager.isExtendsClass(currentItem);
-
-			if (extendsClass) {
-
-				String extendsClassName = defaultClassName;
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Exporter");
-
-				final Item manager = currentItem.getPartParent();
-
-				final Item itemtype = ManagerManager.getItemType(manager);
-
-				final Item superitemtype = ItemTypeManager
-						.getSuperType(itemtype);
-				if (superitemtype != null) {
-					final Item superItemManager = ItemTypeManager
-							.getManager(superitemtype);
-					final Item supercontentItem = ManagerManager
-							.getContentModel(superItemManager);
-					if (supercontentItem != null) {
-						if (ExporterManager.isExtendsClass(supercontentItem)) {
-							extendsClassName = ((JavaFileContentManager) superItemManager
-									.getContentItem()).getClassName(context)
-									+ ".MyContentItem";
-						}
-					}
-				}
-				sb.newline();
-				sb.appendGeneratedTag();
-				sb.newline().append("public class ").append(defaultClassName)
-						.append(" extends ").append(extendsClassName)
-						.append(" {");
-				sb.begin();
-				sb.newline();
-				sb.newline().append("/**");
-				sb.newline().append("	@generated");
-				sb.newline().append("*/");
-				sb.newline().append("public ").append(defaultClassName)
-						.append("(");
-				generateConstructorParameter(sb);
-				sb.decrementLength();
-				sb.append(") {");
-				sb.newline().append("	super(");
-				generateConstrustorArguments(sb);
-				sb.decrementLength();
-				sb.append(");");
-				sb.newline().append("}");
-				sb.end();
-				// @Added begin
-				if (cm.mustExtendExportItemMethod()) {
-					generateExportItemMethod(sb);
-				}
-				generateOtherMethods(currentItem, sb, imports, context);
-				// @Added end
-				sb.newline().append("}");
-				sb.newline();
-
-				imports.add("fr.imag.adele.cadse.core.build.IBuildingContext");
-				imports.add("fr.imag.adele.cadse.core.build.IExportedContent");
-				imports.add("fr.imag.adele.cadse.core.build.IExporterTarget");
-
+		if (kind.abs() == GCst.t_cstes) {
+			if (cm.mustExtendExportItemMethod()) {
+				generateExportItemMethod(sb);
 			}
-		}
-		if ("exporters".equals(kind)) {
-			final boolean extendsClass = cm.mustBeExtended()
-					|| ExporterManager.isExtendsClass(currentItem);
-
-			if (extendsClass) {
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Exporter");
-			}
-
-			sb.newline().append("new ").append(defaultClassName).append("(cm,");
-			generateCallArguments(sb, imports, context, currentItem);
-			sb.decrementLength();
-			sb.append("),");
-
-			imports.add("fr.imag.adele.cadse.core.Item");
-			imports.add("fr.imag.adele.cadse.core.CadseException");
-			imports.add(defaultQualifiedClassName);
-			imports.add("fr.imag.adele.cadse.core.build.IExportedContent");
+			generateOtherMethods(currentItem, sb, imports, context);
 		}
 	}
 
@@ -209,16 +128,6 @@ public class GFileRefExporter extends GExporter {
 		sb.newline().append("	return null;");
 		sb.newline().append("}");
 		sb.newline();
-	}
-
-	@Override
-	protected void generateCallArguments(GenStringBuilder sb,
-			Set<String> imports, GenContext context, Item currentItem) {
-		// sb.append(" new Path(\"" + escapeBackSlashes((String)
-		// getItem().getAttribute(EXPORTED_FOLDER_ATT_NAME)) + "\"),");
-
-		// imports.add("org.eclipse.core.resources.IFolder");
-		super.generateCallArguments(sb, imports, context, currentItem);
 	}
 
 }

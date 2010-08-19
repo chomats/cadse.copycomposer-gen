@@ -7,6 +7,7 @@ import model.workspace.copycomposer.CopyComposerCST;
 
 import fede.workspace.eclipse.composition.java.IPDEContributor;
 import fede.workspace.eclipse.java.JavaIdentifier;
+import fr.imag.adele.cadse.as.generator.GCst;
 import fr.imag.adele.cadse.as.generator.GGenFile;
 import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
@@ -44,119 +45,17 @@ public class GCopyIntoFolderComposer extends GComposer {
 			GToken kind, GenContext context, GGenerator gGenerator,
 			GenState state) {
 
-		ComposerManager cm = (ComposerManager) currentItem.getType()
-				.getItemManager();
-		Set<String> imports = state.getImports();
-
-		final String defaultQualifiedClassName = cm.getDefaultClassName();
-		String defaultClassName = JavaIdentifier
-				.getlastclassName(defaultQualifiedClassName);
-
-		if ("inner-class".equals(kind)) {
-			imports.add("fr.imag.adele.cadse.core.Item");
-			imports.add("fr.imag.adele.cadse.core.CadseException");
-			imports.add(defaultQualifiedClassName);
-			final boolean extendsClass = cm.mustBeExtended()
-					|| cm.isExtendsClass(currentItem);
-			if (extendsClass) {
-
-				final String extendsClassName = defaultClassName;
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Composer");
-				sb.newline();
-				sb.newline().append("/**");
-				sb.newline().append("	@generated");
-				sb.newline().append("*/");
-				sb.newline().append("public class ").append(defaultClassName)
-						.append(" extends ").append(extendsClassName)
-						.append(" {");
-				sb.begin();
-				sb.newline();
-				sb.newline().append("/**");
-				sb.newline().append("	@generated");
-				sb.newline().append("*/");
-				sb.newline().append("public ").append(defaultClassName)
-						.append(" (");
-				generateConstructorParameter(sb);
-				sb.decrementLength();
-				sb.append(") {");
-				sb.newline().append("	super(");
-				generateConstrustorArguments(sb);
-				sb.decrementLength();
-				sb.append(");");
-				sb.newline().append("}");
-
-				imports.add("fr.imag.adele.cadse.core.build.IExporterTarget");
-
-				if (cm.generateGetTargetMethod()) {
-					sb.newline();
-					sb.newline().append("@Override");
-					sb.newline().append(
-							"protected IExporterTarget getTarget() {");
-					sb.newline().append("	// TODO Auto-generated method stub");
-					sb.newline().append("	return null;");
-					sb.newline().append("}");
-
-				}
-
-				sb.newline();
-				sb.newline().append("@Override");
-				sb.newline().append(
-						"protected void postCompose(IBuildingContext context,");
-				sb.newline().append(
-						"		List<IExportedContent> listExportedContent,");
-				sb.newline().append("		IExporterTarget target) {");
-				sb.newline().append("	// TODO Auto-generated method stub");
-				sb.newline()
-						.append("	super.postCompose(context, listExportedContent, target);");
-				sb.newline().append("}");
-
-				// @added begin
-				generateOtherMethods(currentItem, sb, imports, context);
-				// @added end
-
-				sb.end();
-
-				sb.newline().append("}");
-
-				imports.add("java.util.List");
-				imports.add("fr.imag.adele.cadse.core.build.Composer");
-				imports.add("fr.imag.adele.cadse.core.build.IBuildingContext");
-				imports.add("fr.imag.adele.cadse.core.build.IExportedContent");
-
-			}
+		super.generatePartFile(sb, currentItem, gf, kind, context, gGenerator, state);
+		
+		if (kind.abs() == GCst.t_method) {
+			Set<String> imports = state.getImports();
+			generateOtherMethods(currentItem, sb, imports, context);
 		}
 
-		if ("composers".equals(kind)) {
-			final boolean extendsClass = cm.mustBeExtended()
-					|| ComposerManager.isExtendsClass(currentItem);
-
-			if (extendsClass) {
-				defaultClassName = JavaIdentifier.javaIdentifierFromString(
-						currentItem.getName(), true, false, "Composer");
-			}
-
-			// @changed
-			sb.newline().append("new ").append(defaultClassName)
-					.append(" (cm,");
-			generateCallArguments(currentItem, sb, imports, context);
-			sb.decrementLength();
-			sb.append("),");
-		}
 	}
 
 	@Override
-	protected void generateCallArguments(Item currentItem,
-			final GenStringBuilder sb, final Set<String> imports,
-			final GenContext context) {
-
-		sb.appendStringValue(currentItem.getName()).append(", ");
-
-		super.generateCallArguments(currentItem, sb, imports, context);
-	}
-
-	@Override
-	protected void generateConstrustorArguments(final GenStringBuilder sb) {
+	protected void generateConstrustorArguments(final GResult sb, Item currentItem) {
 		sb.newline().append("contentItem, name, exporterTypes,");
 	}
 
@@ -169,7 +68,6 @@ public class GCopyIntoFolderComposer extends GComposer {
 	 * @param context
 	 * @Added
 	 */
-	@Override
 	protected void generateOtherMethods(final Item currentItem,
 			final GResult sb, final Set<String> imports, GenContext context) {
 
