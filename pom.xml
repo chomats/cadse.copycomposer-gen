@@ -19,12 +19,12 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.uiplatform.swt</artifactId>
-    			<version>2.3.1</version>
+    			<version>2.3.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.java</artifactId>
-    			<version>2.3.1</version>
+    			<version>2.3.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>si.view</artifactId>
-    			<version>2.3.1</version>
+    			<version>2.3.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>Model.Workspace.CadseG</artifactId>
-			<version>2.3.2</version>
+			<version>2.3.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
@@ -54,17 +54,17 @@
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>as.generator</artifactId>
-			<version>2.3.1</version>
+			<version>2.3.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>cadseg.generator</artifactId>
-			<version>2.3.2</version>
+			<version>2.3.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.imag.adele.cadse</groupId>
 			<artifactId>Model.Workspace.CopyComposer</artifactId>
-    			<version>2.3.2</version>
+    			<version>2.3.3-SNAPSHOT</version>
 		</dependency>
   </dependencies>
 </project>
