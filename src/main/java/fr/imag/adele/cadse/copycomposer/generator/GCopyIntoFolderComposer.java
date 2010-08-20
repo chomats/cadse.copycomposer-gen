@@ -13,7 +13,7 @@ import fr.imag.adele.cadse.as.generator.GGenerator;
 import fr.imag.adele.cadse.as.generator.GResult;
 import fr.imag.adele.cadse.as.generator.GToken;
 import fr.imag.adele.cadse.as.generator.GenState;
-import fr.imag.adele.cadse.cadseg.ParseTemplate;
+import fr.imag.adele.cadse.cadseg.eclipse.ParseTemplate;
 import fr.imag.adele.cadse.cadseg.exp.ParseException;
 import fr.imag.adele.cadse.cadseg.generator.composer.GComposer;
 import fr.imag.adele.cadse.cadseg.managers.build.ComposerManager;
