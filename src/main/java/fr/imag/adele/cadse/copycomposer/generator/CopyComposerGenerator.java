@@ -28,7 +28,8 @@ public class CopyComposerGenerator extends GGenerator {
 	
 	@Override
 	public void load(IRuntimeGenerator runtimeGenerator) {
-		
+		CopyComposerCST.JAVA_REF_COMPOSER.addAdapter(new GJavaRefComposer.GJavaRefComposer_MF());
+		CopyComposerCST.JAVA_REF_COMPOSER.addAdapter(new GJavaRefComposer.GJavaRefComposer_MF());
 	}
 
 	@Override
