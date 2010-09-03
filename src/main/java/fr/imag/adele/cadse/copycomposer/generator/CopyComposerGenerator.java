@@ -34,18 +34,17 @@ import fr.imag.adele.cadse.as.generator.IRuntimeGenerator;
 import fr.imag.adele.cadse.cadseg.generator.GCadseGenerator;
 import fr.imag.adele.cadse.core.CadseGCST;
 
-
-@Component(name = "fr.imag.adele.cadse.copycomposer.generator", immediate = true, architecture = true)
+@Component(name = "fr.imag.adele.cadse.copyComposerGenerator", immediate = true, architecture = true)
 @Provides(specifications = { IGenerator.class })
-@Instantiate(name="fr.imag.adele.cadse.copycomposer.generator.instance")
+@Instantiate(name = "fr.imag.adele.cadse.copyComposerGenerator.instance")
 public class CopyComposerGenerator extends GGenerator {
-	
+
 	public static final UUID ID = UUID.fromString("C4989870-B3CD-4CAD-9289-B28D6E252E8E");
 
 	public CopyComposerGenerator() {
 		super(ID);
 	}
-	
+
 	@Override
 	public void load(IRuntimeGenerator runtimeGenerator) {
 	//	CopyComposerCST.JAVA_REF_COMPOSER.addAdapter(new GJavaRefComposer.GJavaRefComposer_MF());
